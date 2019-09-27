@@ -1,64 +1,58 @@
-import React, { Component } from "react";
-import ShopContext from "../Context/ShopContext";
-import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
+import React from 'react';
+import Table from 'react-bootstrap/Table';
+import Spinner from 'react-bootstrap/Spinner';
+import { connect } from 'react-redux';
+import { addItemToCart } from '../Actions';
+import ItemProduct from './ItemProduct';
 
-class Products extends Component {
-  render() {
-    return (
-      <ShopContext.Consumer>
-        {context => (
-          <div>
-            <h1>Products</h1>
+const Products = ({ products, addItemToCart }) => (
+  <div>
+    <h1>Products</h1>
 
-            <Table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Description</th>
-                  <th>Price</th>
-                  <th>Stock</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {context.products.length === 0 ? (
-                  <tr>
-                    <td colSpan="5" align="center">
-                      <Spinner animation="border" variant="primary" />
-                    </td>
-                  </tr>
-                ) : (
-                  context.products.map((product, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>{product.id}</td>
-                        <td>{product.name}</td>
-                        <td>${product.price}</td>
-                        <td>{product.stock} Unit(s)</td>
-                        <td>
-                          <Button
-                            onClick={context.addProductToCart.bind(
-                              this,
-                              product
-                            )}
-                            disabled={!(product.stock > 0)}
-                          >
-                            Add
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </Table>
-          </div>
+    <Table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {products.length === 0 ? (
+          <tr>
+            <td colSpan="5" align="center">
+              <Spinner animation="border" variant="primary" />
+            </td>
+          </tr>
+        ) : (
+          products.map((product, index) => {
+            return (
+              <ItemProduct
+                key={index}
+                product={product}
+                addItemToCart={() => addItemToCart(product.id)}
+              />
+            );
+          })
         )}
-      </ShopContext.Consumer>
-    );
-  }
-}
+      </tbody>
+    </Table>
+  </div>
+);
 
-export default Products;
+const mapStateToProps = state => {
+  return { products: state.products, cart: state.cart };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addItemToCart: item => dispatch(addItemToCart(item))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Products);

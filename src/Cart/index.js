@@ -1,20 +1,15 @@
-import React, { Component } from "react";
-import ShopContext from "../Context/ShopContext";
-import Container from "react-bootstrap/Container";
-import CustomRow from "./CustomRow";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import Accordion from "react-bootstrap/Accordion";
+import React, { Component } from 'react';
+import Container from 'react-bootstrap/Container';
+import CustomRow from './CustomRow';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import Accordion from 'react-bootstrap/Accordion';
+import { connect } from 'react-redux';
+import { deleteItemFromCart, buyCart } from '../Actions';
 
 class Cart extends Component {
-  static contextType = ShopContext;
-
-  componentDidMount() {
-    // console.log(this.context);
-  }
-
   render() {
-    const { cart, deleteProductFromCart, buyCart } = this.context;
+    const { cart, deleteItemFromCart, buyCart } = this.props;
     let newCart = [];
 
     let total = cart.reduce(
@@ -25,7 +20,7 @@ class Cart extends Component {
     return (
       <div>
         <h1>Cart</h1>
-        <Accordion>
+        <Accordion defaultActiveKey="0">
           <Card>
             <Card.Header>Resume</Card.Header>
             <Card.Body>
@@ -33,7 +28,10 @@ class Cart extends Component {
               <Card.Text>Total value of ${total}</Card.Text>
               <Button
                 variant="primary"
-                onClick={buyCart.bind(this)}
+                onClick={() => {
+                  buyCart();
+                  alert('Cart was Ordered');
+                }}
                 disabled={cart.length === 0}
               >
                 Buy
@@ -59,7 +57,9 @@ class Cart extends Component {
                           <CustomRow
                             key={index}
                             items={newCartRow}
-                            deleteProductFromCart={deleteProductFromCart}
+                            deleteItemFromCart={() =>
+                              deleteItemFromCart(element.id)
+                            }
                           />
                         );
                       }
@@ -76,4 +76,18 @@ class Cart extends Component {
   }
 }
 
-export default Cart;
+const mapStateToProps = state => {
+  return { cart: state.cart };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    deleteItemFromCart: item => dispatch(deleteItemFromCart(item)),
+    buyCart: () => dispatch(buyCart())
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cart);

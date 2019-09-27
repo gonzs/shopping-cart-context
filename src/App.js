@@ -1,14 +1,15 @@
-import React, { Component } from "react";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
-import Products from "./Products";
-import Cart from "./Cart";
-import NavBar from "./NavBar";
-import GlobalState from "./Context/GlobalState";
+import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import Products from './Products';
+import Cart from './Cart';
+import NavBar from './NavBar';
+import store from './Store';
+import { Provider } from 'react-redux';
 
 class App extends Component {
   render() {
     return (
-      <GlobalState>
+      <Provider store={store}>
         <BrowserRouter>
           <NavBar />
           <Switch>
@@ -17,7 +18,7 @@ class App extends Component {
             <Redirect from="" to="/products" />
           </Switch>
         </BrowserRouter>
-      </GlobalState>
+      </Provider>
     );
   }
 }
