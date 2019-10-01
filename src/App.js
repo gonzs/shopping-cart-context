@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import Products from './Products';
-import Cart from './Cart';
+import Products from './Products/Products';
+import Cart from './Cart/Cart';
 import NavBar from './NavBar';
 import store from './Store';
 import { Provider } from 'react-redux';

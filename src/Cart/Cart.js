@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
-import CustomRow from './CustomRow';
+import LineCart from './LineCart';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Accordion from 'react-bootstrap/Accordion';
@@ -54,7 +54,7 @@ class Cart extends Component {
                         let newCartRow = newCart;
                         newCart = [];
                         return (
-                          <CustomRow
+                          <LineCart
                             key={index}
                             items={newCartRow}
                             deleteItemFromCart={() =>
