@@ -57,9 +57,7 @@ class Cart extends Component {
                           <LineCart
                             key={index}
                             items={newCartRow}
-                            deleteItemFromCart={() =>
-                              deleteItemFromCart(element.id)
-                            }
+                            deleteItemFromCart={deleteItemFromCart}
                           />
                         );
                       }

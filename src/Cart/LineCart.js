@@ -17,7 +17,10 @@ const LineCart = ({ items, deleteItemFromCart }) => (
                 <Card.Title>{item.name.substring(0, 20) + '...'}</Card.Title>
                 <Card.Text>{item.quantity} Unit(s)</Card.Text>
                 <Card.Text>Total of: ${item.totalValue}</Card.Text>
-                <Button variant="danger" onClick={deleteItemFromCart}>
+                <Button
+                  variant="danger"
+                  onClick={() => deleteItemFromCart(item.id)}
+                >
                   Delete
                 </Button>
               </Card.Body>
