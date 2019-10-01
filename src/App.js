@@ -5,8 +5,13 @@ import Cart from './Cart/Cart';
 import NavBar from './NavBar';
 import store from './Store';
 import { Provider } from 'react-redux';
+import { loadProductsAsync } from './Actions';
 
 class App extends Component {
+  componentDidMount() {
+    store.dispatch(loadProductsAsync());
+  }
+
   render() {
     return (
       <Provider store={store}>

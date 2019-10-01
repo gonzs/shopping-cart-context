@@ -12,8 +12,9 @@ const LineCart = ({ items, deleteItemFromCart }) => (
         return (
           <Col key={index} xs={12} sm={12} md={4}>
             <Card>
+              <Card.Img variant="top" src={item.image} />
               <Card.Body>
-                <Card.Title>{item.name}</Card.Title>
+                <Card.Title>{item.name.substring(0, 20) + '...'}</Card.Title>
                 <Card.Text>{item.quantity} Unit(s)</Card.Text>
                 <Card.Text>Total of: ${item.totalValue}</Card.Text>
                 <Button variant="danger" onClick={deleteItemFromCart}>
@@ -34,7 +35,8 @@ LineCart.propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       quantity: PropTypes.number.isRequired,
-      totalValue: PropTypes.number.isRequired
+      totalValue: PropTypes.number.isRequired,
+      image: PropTypes.string.isRequired
     }).isRequired
   ).isRequired,
   deleteItemFromCart: PropTypes.func.isRequired

@@ -1,17 +1,21 @@
 import {
+  LOAD_PRODUCTS,
   ADD_ITEM_TO_CART,
   DELETE_ITEM_FROM_CART,
   BUY_CART
 } from '../Actions/types';
-import { ProductsData } from '../config/data';
 
-const initialState = {
-  products: ProductsData,
-  cart: []
-};
+const initialState = { products: [], cart: [] };
 
 function rootReducer(state = initialState, action) {
   switch (action.type) {
+    case LOAD_PRODUCTS:
+      let newProducts = action.payload;
+      return {
+        ...state,
+        products: newProducts
+      };
+
     case ADD_ITEM_TO_CART:
       let productAdded = state.products.find(
         item => item.id === action.payload
@@ -22,7 +26,8 @@ function rootReducer(state = initialState, action) {
         id: productAdded.id,
         name: productAdded.name,
         quantity: 0,
-        totalValue: productAdded.price
+        totalValue: productAdded.price,
+        image: productAdded.image
       };
 
       if (existed_item) {

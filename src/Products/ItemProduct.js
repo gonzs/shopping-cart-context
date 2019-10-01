@@ -6,7 +6,7 @@ const ItemProduct = ({ product, addItemToCart }) => (
   <tr>
     <td>{product.id}</td>
     <td>{product.name}</td>
-    <td>${product.price}</td>
+    <td>$ {product.price}</td>
     <td>{product.stock} Unit(s)</td>
     <td>
       <Button onClick={addItemToCart} disabled={!(product.stock > 0)}>
@@ -21,7 +21,8 @@ ItemProduct.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    stock: PropTypes.number.isRequired
+    stock: PropTypes.number.isRequired,
+    image: PropTypes.string.isRequired
   }).isRequired,
   addItemToCart: PropTypes.func.isRequired
 };
