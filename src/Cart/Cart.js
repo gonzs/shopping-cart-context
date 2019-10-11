@@ -75,7 +75,7 @@ class Cart extends Component {
 }
 
 const mapStateToProps = state => {
-  return { cart: state.cart };
+  return { cart: state.shoppingCart.cart };
 };
 
 const mapDispatchToProps = dispatch => {

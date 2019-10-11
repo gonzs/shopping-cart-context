@@ -5,11 +5,11 @@ import Cart from './Cart/Cart';
 import NavBar from './NavBar';
 import store from './Store';
 import { Provider } from 'react-redux';
-import { loadProductsAsync } from './Actions';
+import { fetchProductsIfNeeded } from './Actions';
 
 class App extends Component {
   componentDidMount() {
-    store.dispatch(loadProductsAsync());
+    store.dispatch(fetchProductsIfNeeded(store.getState().selectCategory));
   }
 
   render() {

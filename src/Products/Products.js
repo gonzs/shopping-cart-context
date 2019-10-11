@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { addItemToCart } from '../Actions';
 import ItemProduct from './ItemProduct';
 
-const Products = ({ products, addItemToCart }) => (
+const Products = ({ isFetching, success, products, addItemToCart }) => (
   <div>
     <h1>Products</h1>
 
@@ -20,13 +20,13 @@ const Products = ({ products, addItemToCart }) => (
         </tr>
       </thead>
       <tbody>
-        {products.length === 0 ? (
+        {isFetching ? (
           <tr>
             <td colSpan="5" align="center">
               <Spinner animation="border" variant="primary" />
             </td>
           </tr>
-        ) : (
+        ) : success ? (
           products.map((product, index) => {
             return (
               <ItemProduct
@@ -36,6 +36,12 @@ const Products = ({ products, addItemToCart }) => (
               />
             );
           })
+        ) : (
+          <tr>
+            <td colSpan="5" align="center">
+              No Products
+            </td>
+          </tr>
         )}
       </tbody>
     </Table>
@@ -43,7 +49,12 @@ const Products = ({ products, addItemToCart }) => (
 );
 
 const mapStateToProps = state => {
-  return { products: state.products, cart: state.cart };
+  return {
+    isFetching: state.shoppingCart.isFetching,
+    success: state.shoppingCart.success,
+    products: state.shoppingCart.products,
+    cart: state.shoppingCart.cart
+  };
 };
 
 const mapDispatchToProps = dispatch => {

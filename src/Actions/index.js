@@ -1,13 +1,21 @@
 import {
-  LOAD_PRODUCTS,
+  REQUEST_PRODUCTS,
+  RECEIVE_PRODUCTS_OK,
+  RECEIVE_PRODUCTS_ERROR,
   ADD_ITEM_TO_CART,
   DELETE_ITEM_FROM_CART,
-  BUY_CART
+  BUY_CART,
+  SELECT_CATEGORY
 } from './types';
 
-export const loadProductsAsync = payload => dispatch => {
-  fetch('https://api.mercadolibre.com/sites/MLA/search?category=MLA1055')
-    .then(response => response.json())
+const fetchProducts = payload => dispatch => {
+  dispatch(requestProducts());
+
+  fetch(`https://api.mercadolibre.com/sites/MLA/search?category=${payload}`)
+    .then(response => {
+      if (response.ok !== true) throw new Error(response.status);
+      else return response.json();
+    })
     .then(data => {
       let products = data.results.map((item, index) => {
         return {
@@ -18,22 +26,34 @@ export const loadProductsAsync = payload => dispatch => {
           image: item.thumbnail
         };
       });
-      dispatch(loadProducts(products));
+      dispatch(receiveProductsSuccess(products));
+    })
+    .catch(error => {
+      console.log('An error occurred.', error);
+      dispatch(receiveProductsFailure(error));
     });
 };
 
-export function loadProducts(payload) {
+export function requestProducts() {
   return {
-    type: LOAD_PRODUCTS,
+    type: REQUEST_PRODUCTS
+  };
+}
+
+export function receiveProductsSuccess(payload) {
+  return {
+    type: RECEIVE_PRODUCTS_OK,
+    payload
+  };
+}
+export function receiveProductsFailure(payload) {
+  return {
+    type: RECEIVE_PRODUCTS_ERROR,
     payload
   };
 }
 
-export const addItemToCart = payload => dispatch => {
-  dispatch(addToCart(payload));
-};
-
-export function addToCart(payload) {
+export function addItemToCart(payload) {
   return {
     type: ADD_ITEM_TO_CART,
     payload
@@ -46,13 +66,36 @@ export function buyCart(payload) {
   };
 }
 
-export const deleteItemFromCart = payload => dispatch => {
-  dispatch(deleteFromCart(payload));
-};
-
-export function deleteFromCart(payload) {
+export function deleteItemFromCart(payload) {
   return {
     type: DELETE_ITEM_FROM_CART,
     payload
+  };
+}
+
+export function selectCategory(payload) {
+  return {
+    type: SELECT_CATEGORY,
+    payload
+  };
+}
+
+function shouldFetchProducts(state, category) {
+  const products = state.products;
+
+  if (!products) {
+    return true;
+  } else if (state.isFetching) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+export function fetchProductsIfNeeded(category) {
+  return (dispatch, getState) => {
+    if (shouldFetchProducts(getState(), category)) {
+      return dispatch(fetchProducts(category));
+    }
   };
 }

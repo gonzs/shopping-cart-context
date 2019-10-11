@@ -1,19 +1,56 @@
 import {
-  LOAD_PRODUCTS,
+  SELECT_CATEGORY,
+  REQUEST_PRODUCTS,
+  RECEIVE_PRODUCTS_OK,
+  RECEIVE_PRODUCTS_ERROR,
   ADD_ITEM_TO_CART,
   DELETE_ITEM_FROM_CART,
   BUY_CART
 } from '../Actions/types';
+import { combineReducers } from 'redux';
 
-const initialState = { products: [], cart: [] };
-
-function rootReducer(state = initialState, action) {
+function selectCategory(state = 'MLA1053', action) {
   switch (action.type) {
-    case LOAD_PRODUCTS:
-      let newProducts = action.payload;
+    case SELECT_CATEGORY:
+      return action.payload;
+
+    default:
+      return state;
+  }
+}
+
+function shoppingCart(
+  state = {
+    isFetching: false,
+    success: true,
+    error: '',
+    products: [],
+    cart: []
+  },
+  action
+) {
+  switch (action.type) {
+    case REQUEST_PRODUCTS:
       return {
         ...state,
-        products: newProducts
+        isFetching: true
+      };
+
+    case RECEIVE_PRODUCTS_OK:
+      return {
+        ...state,
+        isFetching: false,
+        success: true,
+        products: action.payload
+      };
+
+    case RECEIVE_PRODUCTS_ERROR:
+      console.log(action.payload.toString());
+      return {
+        ...state,
+        isFetching: false,
+        success: false,
+        error: action.payload.toString()
       };
 
     case ADD_ITEM_TO_CART:
@@ -97,4 +134,8 @@ function rootReducer(state = initialState, action) {
       return state;
   }
 }
-export default rootReducer;
+
+export default combineReducers({
+  selectCategory,
+  shoppingCart
+});
