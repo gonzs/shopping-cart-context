@@ -43,6 +43,7 @@ const NavBar = ({ cart, selectCategory, fetchProductsIfNeeded }) => {
           <option value="MLA1053">MLA1053</option>
           <option value="MLA1054">MLA1054</option>
           <option value="MLA1055">MLA1055</option>
+          <option value="MLA1056">MLA1056</option>
         </FormControl>
         <Button variant="outline-info" onClick={handleClick}>
           Search

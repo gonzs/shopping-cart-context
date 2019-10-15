@@ -27,19 +27,27 @@ const Products = ({ isFetching, success, products, addItemToCart }) => (
             </td>
           </tr>
         ) : success ? (
-          products.map((product, index) => {
-            return (
-              <ItemProduct
-                key={index}
-                product={product}
-                addItemToCart={() => addItemToCart(product.id)}
-              />
-            );
-          })
+          products.length !== 0 ? (
+            products.map((product, index) => {
+              return (
+                <ItemProduct
+                  key={index}
+                  product={product}
+                  addItemToCart={() => addItemToCart(product.id)}
+                />
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan="5" align="center">
+                No Items
+              </td>
+            </tr>
+          )
         ) : (
           <tr>
             <td colSpan="5" align="center">
-              No Products
+              Networ Error
             </td>
           </tr>
         )}
