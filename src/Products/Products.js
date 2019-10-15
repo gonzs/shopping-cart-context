@@ -5,56 +5,66 @@ import { connect } from 'react-redux';
 import { addItemToCart } from '../Actions';
 import ItemProduct from './ItemProduct';
 
-const Products = ({ isFetching, success, products, addItemToCart }) => (
-  <div>
-    <h1>Products</h1>
+const Products = ({ isFetching, success, products, addItemToCart }) => {
+  let children;
 
-    <Table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Description</th>
-          <th>Price</th>
-          <th>Stock</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {isFetching ? (
+  if (isFetching)
+    children = (
+      <tr>
+        <td colSpan="5" align="center">
+          <Spinner animation="border" variant="primary" />
+        </td>
+      </tr>
+    );
+
+  if (success && products.length !== 0)
+    children = products.map((product, index) => {
+      return (
+        <ItemProduct
+          key={index}
+          product={product}
+          addItemToCart={() => addItemToCart(product.id)}
+        />
+      );
+    });
+
+  if (success && products.length === 0)
+    children = (
+      <tr>
+        <td colSpan="5" align="center">
+          No Items
+        </td>
+      </tr>
+    );
+
+  if (!success)
+    children = (
+      <tr>
+        <td colSpan="5" align="center">
+          Networ Error
+        </td>
+      </tr>
+    );
+
+  return (
+    <div>
+      <h1>Products</h1>
+
+      <Table>
+        <thead>
           <tr>
-            <td colSpan="5" align="center">
-              <Spinner animation="border" variant="primary" />
-            </td>
+            <th>#</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th></th>
           </tr>
-        ) : success ? (
-          products.length !== 0 ? (
-            products.map((product, index) => {
-              return (
-                <ItemProduct
-                  key={index}
-                  product={product}
-                  addItemToCart={() => addItemToCart(product.id)}
-                />
-              );
-            })
-          ) : (
-            <tr>
-              <td colSpan="5" align="center">
-                No Items
-              </td>
-            </tr>
-          )
-        ) : (
-          <tr>
-            <td colSpan="5" align="center">
-              Networ Error
-            </td>
-          </tr>
-        )}
-      </tbody>
-    </Table>
-  </div>
-);
+        </thead>
+        <tbody>{children}</tbody>
+      </Table>
+    </div>
+  );
+};
 
 const mapStateToProps = state => {
   return {
